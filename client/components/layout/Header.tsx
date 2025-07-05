@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { BookOpen, User, LogOut, Settings, Upload } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -80,6 +81,8 @@ export function Header({ userRole, onRoleSwitch }: HeaderProps) {
               </Link>
             </Button>
           )}
+
+          <ThemeToggle />
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
