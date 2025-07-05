@@ -28,8 +28,8 @@ function expressPlugin(): Plugin {
       // Import createServer dynamically to avoid circular imports during config
       import("./server").then(({ createServer }) => {
         const app = createServer();
-        // Add Express app as middleware to Vite dev server
-        server.middlewares.use(app);
+        // Add Express app as middleware to Vite dev server, but only for API routes
+        server.middlewares.use("/api", app);
       });
     },
   };
