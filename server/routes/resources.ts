@@ -5,7 +5,7 @@ import {
   UploadResponse,
   CreateResourceRequest,
   ResourceCategory,
-} from "@shared/api";
+} from "../../shared/api";
 
 // Mock database - in production, this would be a real database
 let resources: Resource[] = [
@@ -269,11 +269,11 @@ endobj
 
 xref
 0 5
-0000000000 65535 f 
-0000000009 00000 n 
-0000000058 00000 n 
-0000000115 00000 n 
-0000000206 00000 n 
+0000000000 65535 f
+0000000009 00000 n
+0000000058 00000 n
+0000000115 00000 n
+0000000206 00000 n
 trailer
 <<
 /Size 5
