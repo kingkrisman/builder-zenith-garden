@@ -28,8 +28,8 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <KeyboardShortcuts />
         <BrowserRouter>
+          <KeyboardShortcuts />
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/resources" element={<Resources />} />
