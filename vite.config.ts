@@ -25,11 +25,16 @@ function expressPlugin(): Plugin {
     name: "express-plugin",
     apply: "serve", // Only apply during development (serve mode)
     configureServer(server) {
-      // Import createServer dynamically to avoid circular imports during config
-      import("./server").then(({ createServer }) => {
-        const app = createServer();
-        // Add Express app as middleware to Vite dev server, but only for API routes
-        server.middlewares.use("/api", app);
+      // Add middleware that handles API routes
+      server.middlewares.use("/api", async (req, res, next) => {
+        try {
+          const { createServer } = await import("./server/index.js");
+          const app = createServer();
+          app(req, res, next);
+        } catch (error) {
+          console.error("Express middleware error:", error);
+          next();
+        }
       });
     },
   };
