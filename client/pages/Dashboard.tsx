@@ -13,10 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Search,
-  Upload,
-} from "lucide-react";
+import { Search, Upload } from "lucide-react";
 import { Resource, ResourceCategory, ResourcesResponse } from "@shared/api";
 import { Link } from "react-router-dom";
 
@@ -80,7 +77,9 @@ export default function Dashboard() {
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
     const matchesCategory =
-      !categoryFilter || categoryFilter === "all" || resource.category === categoryFilter;
+      !categoryFilter ||
+      categoryFilter === "all" ||
+      resource.category === categoryFilter;
     return matchesSearch && matchesCategory;
   });
 
@@ -172,95 +171,118 @@ export default function Dashboard() {
             {/* Quick Actions */}
             <QuickActions userRole={userRole} />
 
-        {/* Search and Filter */}
-        <div className="mb-6">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search resources..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
+            {/* Search and Filter */}
+            <div className="mb-6">
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-1">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Search resources..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                </div>
+                <Select
+                  value={categoryFilter}
+                  onValueChange={setCategoryFilter}
+                >
+                  <SelectTrigger className="w-full md:w-[200px]">
+                    <SelectValue placeholder="All Categories" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Categories</SelectItem>
+                    <SelectItem value={ResourceCategory.LECTURE_NOTES}>
+                      Lecture Notes
+                    </SelectItem>
+                    <SelectItem value={ResourceCategory.ASSIGNMENT}>
+                      Assignments
+                    </SelectItem>
+                    <SelectItem value={ResourceCategory.PAST_QUESTIONS}>
+                      Past Questions
+                    </SelectItem>
+                    <SelectItem value={ResourceCategory.REFERENCE_MATERIAL}>
+                      Reference Material
+                    </SelectItem>
+                    <SelectItem value={ResourceCategory.SYLLABUS}>
+                      Syllabus
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
-            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger className="w-full md:w-[200px]">
-                <SelectValue placeholder="All Categories" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                <SelectItem value={ResourceCategory.LECTURE_NOTES}>
-                  Lecture Notes
-                </SelectItem>
-                <SelectItem value={ResourceCategory.ASSIGNMENT}>
-                  Assignments
-                </SelectItem>
-                <SelectItem value={ResourceCategory.PAST_QUESTIONS}>
-                  Past Questions
-                </SelectItem>
-                <SelectItem value={ResourceCategory.REFERENCE_MATERIAL}>
-                  Reference Material
-                </SelectItem>
-                <SelectItem value={ResourceCategory.SYLLABUS}>
-                  Syllabus
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
 
-        {/* Resources Grid */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold">
-              {userRole === "lecturer" ? "Your Resources" : "Recent Resources"}
-            </h2>
-            <Button variant="outline" asChild>
-              <Link to="/resources">View All</Link>
-            </Button>
-          </div>
-
-          {loading ? (
-            <div className="text-center py-12">
-              <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4" />
-              <p className="text-muted-foreground">Loading resources...</p>
-            </div>
-          ) : filteredResources.length === 0 ? (
-            <div className="text-center py-12">
-              <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-medium mb-2">No resources found</h3>
-              <p className="text-muted-foreground mb-4">
-                {searchQuery || categoryFilter
-                  ? "Try adjusting your search or filter criteria."
-                  : userRole === "lecturer"
-                    ? "Upload your first resource to get started."
-                    : "No resources available yet."}
-              </p>
-              {userRole === "lecturer" && (
-                <Button asChild>
-                  <Link to="/upload">
-                    <Upload className="h-4 w-4 mr-2" />
-                    Upload Resource
-                  </Link>
+            {/* Resources Grid */}
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold">
+                  {userRole === "lecturer"
+                    ? "Your Resources"
+                    : "Recent Resources"}
+                </h2>
+                <Button variant="outline" asChild>
+                  <Link to="/resources">View All</Link>
                 </Button>
+              </div>
+
+              {loading ? (
+                <div className="text-center py-12">
+                  <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4" />
+                  <p className="text-muted-foreground">Loading resources...</p>
+                </div>
+              ) : filteredResources.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-medium mb-2">
+                    No resources found
+                  </h3>
+                  <p className="text-muted-foreground mb-4">
+                    {searchQuery || (categoryFilter && categoryFilter !== "all")
+                      ? "Try adjusting your search or filter criteria."
+                      : userRole === "lecturer"
+                        ? "Upload your first resource to get started."
+                        : "No resources available yet."}
+                  </p>
+                  {userRole === "lecturer" && (
+                    <Button asChild>
+                      <Link to="/upload">
+                        <Upload className="h-4 w-4 mr-2" />
+                        Upload Resource
+                      </Link>
+                    </Button>
+                  )}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {filteredResources.slice(0, 4).map((resource) => (
+                    <EnhancedResourceCard
+                      key={resource.id}
+                      resource={{
+                        ...resource,
+                        rating: 4.2 + Math.random(),
+                        isBookmarked: Math.random() > 0.5,
+                        commentsCount: Math.floor(Math.random() * 10),
+                      }}
+                      userRole={userRole}
+                      onDownload={handleDownload}
+                      onDelete={
+                        userRole === "lecturer" ? handleDelete : undefined
+                      }
+                      onBookmark={(id) => console.log("Bookmark:", id)}
+                      onShare={(id) => console.log("Share:", id)}
+                    />
+                  ))}
+                </div>
               )}
             </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredResources.slice(0, 6).map((resource) => (
-                <ResourceCard
-                  key={resource.id}
-                  resource={resource}
-                  userRole={userRole}
-                  onDownload={handleDownload}
-                  onDelete={userRole === "lecturer" ? handleDelete : undefined}
-                />
-              ))}
-            </div>
-          )}
+          </div>
+
+          {/* Sidebar */}
+          <div className="space-y-8">
+            <RecentActivity userRole={userRole} />
+          </div>
         </div>
       </main>
     </div>
