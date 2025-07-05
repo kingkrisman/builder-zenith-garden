@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import multer from "multer";
 import { handleDemo } from "./routes/demo";
 import {
   handleGetResources,
@@ -11,6 +12,21 @@ import {
 
 export function createServer() {
   const app = express();
+
+  // Configure multer for file uploads
+  const upload = multer({
+    storage: multer.memoryStorage(), // Store files in memory for demo
+    limits: {
+      fileSize: 50 * 1024 * 1024, // 50MB limit
+    },
+    fileFilter: (req, file, cb) => {
+      if (file.mimetype === "application/pdf") {
+        cb(null, true);
+      } else {
+        cb(new Error("Only PDF files are allowed"));
+      }
+    },
+  });
 
   // Middleware
   app.use(cors());
@@ -26,7 +42,7 @@ export function createServer() {
 
   // Resources API routes
   app.get("/resources", handleGetResources);
-  app.post("/resources", handleUploadResource);
+  app.post("/resources", upload.single("file"), handleUploadResource);
   app.get("/resources/:id", handleGetResource);
   app.get("/resources/:id/download", handleDownloadResource);
   app.delete("/resources/:id", handleDeleteResource);
