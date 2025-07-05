@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { Header } from "@/components/layout/Header";
-import { ResourceCard } from "@/components/resources/ResourceCard";
+import { EnhancedResourceCard } from "@/components/resources/EnhancedResourceCard";
+import { StatsCards } from "@/components/dashboard/StatsCards";
+import { RecentActivity } from "@/components/dashboard/RecentActivity";
+import { QuickActions } from "@/components/dashboard/QuickActions";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -12,13 +14,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  BookOpen,
-  FileText,
-  Download,
-  Upload,
   Search,
-  TrendingUp,
-  Users,
+  Upload,
 } from "lucide-react";
 import { Resource, ResourceCategory, ResourcesResponse } from "@shared/api";
 import { Link } from "react-router-dom";
@@ -83,17 +80,19 @@ export default function Dashboard() {
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
     const matchesCategory =
-      !categoryFilter ||
-      categoryFilter === "all" ||
-      resource.category === categoryFilter;
+      !categoryFilter || categoryFilter === "all" || resource.category === categoryFilter;
     return matchesSearch && matchesCategory;
   });
 
   const stats = {
     totalResources: resources.length,
     totalDownloads: resources.reduce((sum, r) => sum + r.downloadCount, 0),
-    categories: Object.values(ResourceCategory).length,
     subjects: new Set(resources.map((r) => r.subject)).size,
+    activeUsers: 156,
+    weeklyUploads: 8,
+    weeklyDownloads: 145,
+    avgRating: 4.2,
+    recentActivity: 23,
   };
 
   // Mock data for demonstration
@@ -164,102 +163,14 @@ export default function Dashboard() {
           </p>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Total Resources
-              </CardTitle>
-              <FileText className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalResources}</div>
-              <p className="text-xs text-muted-foreground">+2 new this week</p>
-            </CardContent>
-          </Card>
+        {/* Enhanced Stats Cards */}
+        <StatsCards stats={stats} userRole={userRole} />
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Total Downloads
-              </CardTitle>
-              <Download className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalDownloads}</div>
-              <p className="text-xs text-muted-foreground">
-                +23 from last week
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Subjects</CardTitle>
-              <BookOpen className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.subjects}</div>
-              <p className="text-xs text-muted-foreground">
-                Across departments
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Active Users
-              </CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">156</div>
-              <p className="text-xs text-muted-foreground">
-                +12% from last month
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
-          <div className="flex flex-wrap gap-4">
-            {userRole === "lecturer" ? (
-              <>
-                <Button asChild>
-                  <Link to="/upload">
-                    <Upload className="h-4 w-4 mr-2" />
-                    Upload Resource
-                  </Link>
-                </Button>
-                <Button variant="outline" asChild>
-                  <Link to="/analytics">
-                    <TrendingUp className="h-4 w-4 mr-2" />
-                    View Analytics
-                  </Link>
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button asChild>
-                  <Link to="/resources">
-                    <Search className="h-4 w-4 mr-2" />
-                    Browse Resources
-                  </Link>
-                </Button>
-                <Button variant="outline" asChild>
-                  <Link to="/favorites">
-                    <BookOpen className="h-4 w-4 mr-2" />
-                    My Downloads
-                  </Link>
-                </Button>
-              </>
-            )}
-          </div>
-        </div>
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          <div className="lg:col-span-2 space-y-8">
+            {/* Quick Actions */}
+            <QuickActions userRole={userRole} />
 
         {/* Search and Filter */}
         <div className="mb-6">
