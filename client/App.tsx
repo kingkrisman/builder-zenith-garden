@@ -9,6 +9,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Resources from "./pages/Resources";
 import Upload from "./pages/Upload";
+import Analytics from "./pages/Analytics";
+import Favorites from "./pages/Favorites";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +25,8 @@ const App = () => (
           <Route path="/" element={<Dashboard />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/upload" element={<Upload />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/favorites" element={<Favorites />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
