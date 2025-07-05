@@ -163,9 +163,13 @@ export default function Resources() {
           tag.toLowerCase().includes(searchQuery.toLowerCase()),
         );
       const matchesCategory =
-        !categoryFilter || resource.category === categoryFilter;
+        !categoryFilter ||
+        categoryFilter === "all" ||
+        resource.category === categoryFilter;
       const matchesSubject =
-        !subjectFilter || resource.subject === subjectFilter;
+        !subjectFilter ||
+        subjectFilter === "all" ||
+        resource.subject === subjectFilter;
       return matchesSearch && matchesCategory && matchesSubject;
     });
 
@@ -273,7 +277,7 @@ export default function Resources() {
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Categories</SelectItem>
+                  <SelectItem value="all">All Categories</SelectItem>
                   <SelectItem value={ResourceCategory.LECTURE_NOTES}>
                     Lecture Notes
                   </SelectItem>
@@ -299,7 +303,7 @@ export default function Resources() {
                   <SelectValue placeholder="Subject" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Subjects</SelectItem>
+                  <SelectItem value="all">All Subjects</SelectItem>
                   {subjects.map((subject) => (
                     <SelectItem key={subject} value={subject}>
                       {subject}

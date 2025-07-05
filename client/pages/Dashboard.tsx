@@ -83,7 +83,9 @@ export default function Dashboard() {
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
     const matchesCategory =
-      !categoryFilter || resource.category === categoryFilter;
+      !categoryFilter ||
+      categoryFilter === "all" ||
+      resource.category === categoryFilter;
     return matchesSearch && matchesCategory;
   });
 
@@ -278,7 +280,7 @@ export default function Dashboard() {
                 <SelectValue placeholder="All Categories" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 <SelectItem value={ResourceCategory.LECTURE_NOTES}>
                   Lecture Notes
                 </SelectItem>
