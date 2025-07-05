@@ -142,16 +142,7 @@ export const handleGetResources: RequestHandler = (req, res) => {
 // POST /api/resources - Upload new resource
 export const handleUploadResource: RequestHandler = (req, res) => {
   try {
-    // In a real application, you would:
-    // 1. Use multer to handle file uploads
-    // 2. Validate file type and size
-    // 3. Store file in cloud storage (AWS S3, etc.)
-    // 4. Save metadata to database
-
-    const file = req.file; // This would be provided by multer
-    const metadata: CreateResourceRequest = JSON.parse(
-      req.body.metadata || "{}",
-    );
+    const file = req.file; // Provided by multer middleware
 
     if (!file) {
       const response: UploadResponse = {
@@ -161,10 +152,23 @@ export const handleUploadResource: RequestHandler = (req, res) => {
       return res.status(400).json(response);
     }
 
+    // Parse metadata from form data
+    let metadata: CreateResourceRequest;
+    try {
+      metadata = JSON.parse(req.body.metadata || "{}");
+    } catch (parseError) {
+      const response: UploadResponse = {
+        success: false,
+        message: "Invalid metadata format",
+      };
+      return res.status(400).json(response);
+    }
+
     if (!metadata.title || !metadata.category || !metadata.subject) {
       const response: UploadResponse = {
         success: false,
-        message: "Missing required metadata",
+        message:
+          "Missing required metadata: title, category, and subject are required",
       };
       return res.status(400).json(response);
     }
@@ -174,8 +178,8 @@ export const handleUploadResource: RequestHandler = (req, res) => {
       id: Date.now().toString(), // In production, use proper ID generation
       title: metadata.title,
       description: metadata.description || "",
-      fileName: file.originalname || "document.pdf",
-      fileSize: file.size || 0,
+      fileName: file.originalname,
+      fileSize: file.size,
       category: metadata.category,
       subject: metadata.subject,
       uploadedBy: "Current User", // In production, get from authenticated user
@@ -184,6 +188,8 @@ export const handleUploadResource: RequestHandler = (req, res) => {
       tags: metadata.tags || [],
     };
 
+    // In production, you would save the file to cloud storage here
+    // For demo, we just store the metadata
     resources.push(newResource);
 
     const response: UploadResponse = {
@@ -197,7 +203,8 @@ export const handleUploadResource: RequestHandler = (req, res) => {
     console.error("Error uploading resource:", error);
     const response: UploadResponse = {
       success: false,
-      message: "Failed to upload resource",
+      message:
+        error instanceof Error ? error.message : "Failed to upload resource",
     };
     res.status(500).json(response);
   }
