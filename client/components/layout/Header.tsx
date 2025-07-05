@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { BookOpen, User, LogOut, Settings, Upload } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -82,6 +83,7 @@ export function Header({ userRole, onRoleSwitch }: HeaderProps) {
             </Button>
           )}
 
+          <NotificationBell />
           <ThemeToggle />
 
           <DropdownMenu>
