@@ -4,6 +4,7 @@ import { EnhancedResourceCard } from "@/components/resources/EnhancedResourceCar
 import { StatsCards } from "@/components/dashboard/StatsCards";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { QuickActions } from "@/components/dashboard/QuickActions";
+import { HelpTips } from "@/components/help/HelpTips";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -285,6 +286,7 @@ export default function Dashboard() {
           </div>
         </div>
       </main>
+      <HelpTips />
     </div>
   );
 }
