@@ -237,8 +237,8 @@ export default function Resources() {
 
   const clearFilters = () => {
     setSearchQuery("");
-    setCategoryFilter("");
-    setSubjectFilter("");
+    setCategoryFilter("all");
+    setSubjectFilter("all");
     setSortBy("date");
     setSortOrder("desc");
   };
@@ -358,7 +358,9 @@ export default function Resources() {
 
           <div className="flex items-center justify-between">
             <div className="flex flex-wrap gap-2">
-              {(searchQuery || categoryFilter || subjectFilter) && (
+              {(searchQuery ||
+                (categoryFilter && categoryFilter !== "all") ||
+                (subjectFilter && subjectFilter !== "all")) && (
                 <>
                   {searchQuery && (
                     <Badge variant="secondary">
@@ -371,22 +373,22 @@ export default function Resources() {
                       </button>
                     </Badge>
                   )}
-                  {categoryFilter && (
+                  {categoryFilter && categoryFilter !== "all" && (
                     <Badge variant="secondary">
                       Category: {categoryFilter.replace("_", " ")}
                       <button
-                        onClick={() => setCategoryFilter("")}
+                        onClick={() => setCategoryFilter("all")}
                         className="ml-1 hover:text-destructive"
                       >
                         ×
                       </button>
                     </Badge>
                   )}
-                  {subjectFilter && (
+                  {subjectFilter && subjectFilter !== "all" && (
                     <Badge variant="secondary">
                       Subject: {subjectFilter}
                       <button
-                        onClick={() => setSubjectFilter("")}
+                        onClick={() => setSubjectFilter("all")}
                         className="ml-1 hover:text-destructive"
                       >
                         ×
