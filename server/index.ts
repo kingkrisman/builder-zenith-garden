@@ -18,18 +18,18 @@ export function createServer() {
   app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
   // Example API routes
-  app.get("/api/ping", (_req, res) => {
+  app.get("/ping", (_req, res) => {
     res.json({ message: "Hello from Express server v2!" });
   });
 
-  app.get("/api/demo", handleDemo);
+  app.get("/demo", handleDemo);
 
   // Resources API routes
-  app.get("/api/resources", handleGetResources);
-  app.post("/api/resources", handleUploadResource);
-  app.get("/api/resources/:id", handleGetResource);
-  app.get("/api/resources/:id/download", handleDownloadResource);
-  app.delete("/api/resources/:id", handleDeleteResource);
+  app.get("/resources", handleGetResources);
+  app.post("/resources", handleUploadResource);
+  app.get("/resources/:id", handleGetResource);
+  app.get("/resources/:id/download", handleDownloadResource);
+  app.delete("/resources/:id", handleDeleteResource);
 
   return app;
 }
