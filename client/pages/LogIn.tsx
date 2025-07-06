@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { BookOpen, Eye, EyeOff, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,9 @@ export default function LogInPage() {
   const [error, setError] = useState("");
   const { login, isAuthenticated, isLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || "/";
 
   const {
     register,
@@ -42,7 +45,7 @@ export default function LogInPage() {
     const success = await login(data.email, data.password);
 
     if (success) {
-      navigate("/");
+      navigate(from, { replace: true });
     } else {
       setError(
         "Invalid email or password. Please check your credentials and try again.",
