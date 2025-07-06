@@ -9,6 +9,7 @@ import { KeyboardShortcuts } from "@/components/shortcuts/KeyboardShortcuts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
 import Resources from "./pages/Resources";
 import Upload from "./pages/Upload";
@@ -37,11 +38,46 @@ const App = () => (
             <Routes>
               <Route path="/signin" element={<SignIn />} />
               <Route path="/login" element={<LogIn />} />
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/resources" element={<Resources />} />
-              <Route path="/upload" element={<Upload />} />
-              <Route path="/analytics" element={<Analytics />} />
-              <Route path="/favorites" element={<Favorites />} />
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/resources"
+                element={
+                  <ProtectedRoute>
+                    <Resources />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/upload"
+                element={
+                  <ProtectedRoute>
+                    <Upload />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/analytics"
+                element={
+                  <ProtectedRoute>
+                    <Analytics />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/favorites"
+                element={
+                  <ProtectedRoute>
+                    <Favorites />
+                  </ProtectedRoute>
+                }
+              />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
